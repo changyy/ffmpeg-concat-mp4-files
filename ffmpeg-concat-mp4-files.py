@@ -40,7 +40,7 @@ if __name__ == "__main__":
 				]
 				subprocess.call( cmd )
 				if os.path.exists(wget_target):
-					wget_tmp.append(target)
+					wget_tmp.append(wget_target)
 					if os.stat(wget_target).st_size > 0:
 						files.append(wget_target)
 						print "\tSave: ", wget_target
