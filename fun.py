@@ -154,10 +154,10 @@ if __name__ == "__main__":
 			print "[Remove] mp4_tmp: ", f
 			os.remove(f)
 	if args.delete_wget_files:
-		if os.path.exists(f):
 			for f in wget_tmp:
-				print "[Remove] wget_tmp: ", f
-				os.remove(f)
+				if os.path.exists(f):
+					print "[Remove] wget_tmp: ", f
+					os.remove(f)
 
 	print
 	print "result: ", args.output
