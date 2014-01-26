@@ -4,15 +4,15 @@ import sys
 import subprocess
 import argparse
 parser = argparse.ArgumentParser(description='Use ffmpeg concat mp4 files')
-parser.add_argument('--files', metavar='File', nargs='+', type=str, help='order files waiting for concatenating')
+parser.add_argument('--files', metavar='File', nargs='+', type=str, help='Sequence MP4(h.264) file for concatenating')
 parser.add_argument('--output', metavar='Output', type=str, help='output file')
 parser.add_argument('--m3u', metavar='M3U video list', type=str, help='m3u mp4 list')
 parser.add_argument('--tmp', metavar='Working Dir', type=str, help='Working dir')
 
 if __name__ == "__main__":
 	files = []
-	waiting = []
-	tmp = []
+	mp4_tmp = []
+	wget_tmp = []
 	args = parser.parse_args()
 	if args.tmp == None:
 		args.tmp = '/tmp'
@@ -31,18 +31,19 @@ if __name__ == "__main__":
 		for target in lines:
 			if target[0:4] == 'http':
 				print "[Wget] file("+str(i)+"): ", target
-				tmp_wget = args.tmp+'/wget_'+str(i)+'_.mp4'
+				wget_target = args.tmp+'/wget_'+str(i)+'_.mp4'
 				i = i + 1
-				tmp.append(target)
 				cmd = [
 					'wget', 
-					'-O' , tmp_wget,
+					'-O' , wget_target,
 					target
 				]
 				subprocess.call( cmd )
-				if os.path.exists(tmp_wget) and os.stat(tmp_wget).st_size > 0:
-					files.append(tmp_wget)
-					print "\tSave: ", tmp_wget
+				if os.path.exists(wget_target):
+					wget_tmp.append(target)
+					if os.stat(wget_target).st_size > 0:
+						files.append(wget_target)
+						print "\tSave: ", wget_target
 			else:
 				if os.path.exists(target) and os.stat(target).st_size > 0:
 					print "[Add] file("+str(i)+"): ", target
@@ -61,13 +62,13 @@ if __name__ == "__main__":
 				target
 		]
 		subprocess.call( cmd )
-		waiting.append(target)
+		mp4_tmp.append(target)
 
-	if len(waiting) <= 1:
-		print "No files:", waiting
+	if len(mp4_tmp) <= 1:
+		print "No files:", mp4_tmp
 		sys.exit(0)
 
-	concat_list = "|".join(waiting)
+	concat_list = "|".join(mp4_tmp)
 	print
 	print "concat raw files: ", concat_list
 	print
@@ -84,7 +85,7 @@ if __name__ == "__main__":
 	print "result: ", args.output
 	print
 
-	for f in waiting:
+	for f in mp4_tmp:
 		os.remove(f)
-	for f in tmp:
+	for f in wget_tmp:
 		os.remove(f)
