@@ -81,11 +81,14 @@ if __name__ == "__main__":
 			args.output ,
 	]
 	subprocess.call( cmd )
+
+	for f in mp4_tmp:
+		print "[Remove] mp4_tmp: ", f
+		os.remove(f)
+	for f in wget_tmp:
+		print "[Remove] wget_tmp: ", f
+		os.remove(f)
+
 	print
 	print "result: ", args.output
 	print
-
-	for f in mp4_tmp:
-		os.remove(f)
-	for f in wget_tmp:
-		os.remove(f)
