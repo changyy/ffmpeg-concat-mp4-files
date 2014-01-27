@@ -91,7 +91,7 @@ if __name__ == "__main__":
 
 				if current_thread_jobs_skip:
 					break
-				job = MyWGETMultiThread(i, target, args.tmp+'/wget_'+str(i).zfill(2)+'_.mp4', wget_tmp, files, max_thread_semo)
+				job = MyWGETMultiThread(i, target, args.tmp+'/wget_'+str(os.getpid())+'_'+str(i).zfill(2)+'_.mp4', wget_tmp, files, max_thread_semo)
 				i = i + 1
 				current_thread_jobs.append(job)
 				job.start()

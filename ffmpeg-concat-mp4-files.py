@@ -31,7 +31,7 @@ if __name__ == "__main__":
 		for target in lines:
 			if target[0:4] == 'http':
 				print "[Wget] file("+str(i)+"): ", target
-				wget_target = args.tmp+'/wget_'+str(i).zfill(2)+'_.mp4'
+				wget_target = args.tmp+'/wget_'+str(os.getpid())+'_'+str(i).zfill(2)+'_.mp4'
 				i = i + 1
 				cmd = [
 					'wget', 
